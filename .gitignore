@@ -1,0 +1,18 @@
+# Ralph runs and artifacts
+scripts/ralph/runs/
+
+# Temp files
+*.log
+*.tmp
+.DS_Store
+
+# Cloned repos (for reference only)
+gmickel-claude-marketplace/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
