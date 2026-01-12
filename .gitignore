@@ -1,6 +1,13 @@
 # Ralph runs and artifacts
 scripts/ralph/runs/
 
+# Private files - DO NOT COMMIT
+*.pdf
+applications.json
+PROMPT.md
+PRD.md
+.playwright-mcp/
+
 # Temp files
 *.log
 *.tmp
