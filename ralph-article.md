@@ -1,8 +1,8 @@
 # I Let an AI Agent Run Overnight. Here's What I Learned About Ralph Loop.
 
-Spent the weekend exploring Ralph Loop, the autonomous AI coding technique that's been making rounds in the AI engineering community. The concept is simple: instead of babysitting Claude or GPT through every step, you set up a loop that keeps feeding the same prompt until the task is done.
+Spent the weekend exploring Ralph Loop, an autonomous AI coding technique that's been making rounds in the AI engineering community. The concept is simple: instead of babysitting Claude or GPT through every step, you set up a loop that keeps feeding the same prompt until the task is done.
 
-The original idea comes from Geoffrey Huntley. The core insight? Let the AI see its own mess. Each iteration, it reads the files it modified, sees what worked and what didn't, and iterates toward a solution. No hand-holding required.
+The original idea comes from Geoffrey Huntley. The core insight? Let the AI see its own mess. Each iteration, it reads the files it modified, sees what worked and what didn't, and iterates toward a solution. No hand holding required.
 
 ## How It Works
 
@@ -20,15 +20,15 @@ State lives in files, not in the conversation. That's the key difference from ju
 
 ## What You Can Build With It
 
-The technique works best for tasks with clear completion criteria:
+The technique works best for tasks with clear completion criteria.
 
-**Codebase migrations.** "Convert all JavaScript files to TypeScript. Output DONE when `npm run typecheck` passes."
+**Codebase migrations.** "Convert all JavaScript files to TypeScript. Output DONE when npm run typecheck passes."
 
-**Test coverage.** "Write tests until coverage hits 80%. Run `npm test` after each change."
+**Test coverage.** "Write tests until coverage hits 80%. Run npm test after each change."
 
-**Bug fixes.** "Fix all failing tests. Output COMPLETE when `npm test` exits 0."
+**Bug fixes.** "Fix all failing tests. Output COMPLETE when npm test exits 0."
 
-**Documentation.** "Add docstrings to all public functions. Verify with `pydoc`."
+**Documentation.** "Add docstrings to all public functions. Verify with pydoc."
 
 The pattern is always the same: define success in terms of a command that can be verified, let the AI iterate until that command passes.
 
@@ -42,44 +42,35 @@ The other approach starts fresh each iteration. New session, clean context, but 
 
 I found the fresh context approach more reliable for longer tasks. When you're running 50+ iterations overnight, accumulated context becomes a liability. The AI starts hallucinating based on things it tried hours ago.
 
-## Multi-Model Review Gates
+## Multi Model Review Gates
 
 One addition I found valuable: using a second model as a reviewer. After the primary agent makes changes, a different model reviews the work before marking the task complete.
 
 Two models catch what one misses. The reviewer doesn't share the implementer's blind spots.
 
-Tools like RepoPrompt (macOS) or OpenAI's Codex CLI work well for this. The review blocks progress until it returns a SHIP verdict. No rubber-stamping.
+Tools like RepoPrompt on macOS or OpenAI's Codex CLI work well for this. The review blocks progress until it returns a SHIP verdict. No rubber stamping.
 
-## Integration With Coding CLIs
+## Integration With Other Coding CLIs
 
-Ralph Loop isn't tied to any specific tool. The same pattern works with:
-
-**Claude Code** for complex reasoning tasks
-**OpenAI Codex** for code generation with review capabilities
-**Cursor** in headless mode
-**Aider** for git-aware changes
+Ralph Loop isn't tied to any specific tool. The same pattern works with Claude Code for complex reasoning, OpenAI Codex for code generation, Cursor in headless mode, or Aider for git aware changes.
 
 The key is having a CLI that accepts a prompt and outputs to stdout. Wrap it in a bash loop, point it at your PROMPT.md, and you have an autonomous agent.
 
-Some tools like flow-next bundle this into a complete workflow with task management, dependency tracking, and receipt-based verification. But you can start with just bash and your favorite AI CLI.
+Some tools like flow-next bundle this into a complete workflow with task management, dependency tracking, and receipt based verification. But you can start with just bash and your favorite AI CLI.
 
-## When It Works (and When It Doesn't)
+## When It Works and When It Doesn't
 
 Ralph excels at mechanical tasks with verifiable outcomes. Migrations, test fixes, documentation, refactoring with clear patterns.
 
-It struggles with tasks requiring design judgment, ambiguous requirements, or human feedback loops. Don't expect it to architect your system. Do expect it to implement a well-specified feature while you sleep.
+It struggles with tasks requiring design judgment, ambiguous requirements, or human feedback loops. Don't expect it to architect your system. Do expect it to implement a well specified feature while you sleep.
 
 The technique also burns through API credits quickly. Set iteration limits. Monitor costs. A runaway loop can get expensive.
 
 ## Getting Started
 
-If you want to try it:
+If you want to try it, I've put together a repo with my experiments: https://github.com/Timtech4u/ralph-loop-experiments
 
-1. Write a PROMPT.md with your task and success criteria
-2. Include a verification command the AI can run
-3. Define a completion phrase the AI outputs when done
-4. Wrap your preferred AI CLI in a bash loop
-5. Start with a small task and watch it work before going AFK
+The setup uses flow-next for structured task management. You create an epic, break it into tasks with dependencies, and let Ralph work through them autonomously. Each iteration gets fresh context, re-anchors from the task specs, and optionally runs through a multi model review gate.
 
 The magic isn't in the tooling. It's in writing prompts that converge toward correct solutions. That's a skill worth developing.
 
@@ -90,3 +81,9 @@ Ralph Loop shifts the bottleneck from "can the AI do this?" to "can I specify th
 When you write a prompt that includes verification commands and clear success criteria, you're doing the hard work upfront. The AI handles the iteration.
 
 That's a trade I'm happy to make.
+
+---
+
+Check out the repo: https://github.com/Timtech4u/ralph-loop-experiments
+
+Shoutout to Geoffrey Huntley for the original Ralph technique and Gordon Mickel for the flow-next implementation that makes this production ready.
